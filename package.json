@@ -1,5 +1,5 @@
 {
-  "name": "sql-over-rest",
+  "name": "node-sql-over-http",
   "version": "0.1.0",
   "description": "Send SQL queries over REST api to quickly prototype your ideas",
   "main": "server.js",
