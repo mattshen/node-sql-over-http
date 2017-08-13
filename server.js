@@ -10,8 +10,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //routes
 const index = require('./routes/index');
 const sql = require('./routes/sql');
+const insert = require('./routes/insert');
 app.use('/', index);
 app.use('/sql', sql);
+app.use('/insert', insert);
 
 
 // start http server
