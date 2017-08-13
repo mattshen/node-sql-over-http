@@ -11,9 +11,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
+let routerPrefix = '';
 if (CURRENT_ENV === 'prod') {
+  routerPrefix = 'soh';
   const basicAuth = require('express-basic-auth')
   app.use(basicAuth({
       users: { 'user1': 'mingtian123' },
@@ -24,9 +24,9 @@ if (CURRENT_ENV === 'prod') {
 const index = require('./routes/index');
 const sql = require('./routes/sql');
 const insert = require('./routes/insert');
-app.use('/', index);
-app.use('/sql', sql);
-app.use('/insert', insert);
+app.use(routerPrefix + '/', index);
+app.use(routerPrefix + '/sql', sql);
+app.use(routerPrefix + '/insert', insert);
 
 
 // start http server
