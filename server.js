@@ -2,10 +2,23 @@ const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 
+//environment check
+const CURRENT_ENV = process.env.CURRENT_ENV || 'dev';
+console.log('Current Environment: ' + CURRENT_ENV);
+
 //middlewares
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
+if (CURRENT_ENV === 'prod') {
+  const basicAuth = require('express-basic-auth')
+  app.use(basicAuth({
+      users: { 'user1': 'mingtian123' },
+  }));
+}
 
 //routes
 const index = require('./routes/index');
