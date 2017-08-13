@@ -10,16 +10,19 @@ module.exports = {
       script    : 'server.js',
       watch     : true,
       env: {
+          NODE_ENV: "development",
           DB_HOST : 'localhost',
           DB_USER : 'root',
           DB_PASS : '',
           DB_SCHEMA:  'letterbox',
-          NODE_ENV: "development",
           PORT : 3000
       },
       env_production : {
         NODE_ENV: 'production',
-        APP_CONTEXT_PATH: '/lb'
+        APP_CONTEXT_PATH: '/lb',
+        DB_USER : 'root',
+        DB_PASS : '',
+        DB_SCHEMA:  'test',
       }
     },
   ]
