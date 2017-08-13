@@ -11,8 +11,10 @@ router.post('/', function (req, res, next) {
     if (!err) {
       let response = null;
 
-      if (result.length || result.affectedRows) {
-        response = createResponse(true, result);;
+      if (result.length === 0 || result.affectedRows === 0 ) {
+        response = createResponse(true, result);
+      } else if (result.length || result.affectedRows) {
+        response = createResponse(true, result);
       } else {
         response = createResponse(false, undefined, 'No Result Found');
       }
@@ -23,5 +25,6 @@ router.post('/', function (req, res, next) {
     }
   });
 });
+
 
 module.exports = router;

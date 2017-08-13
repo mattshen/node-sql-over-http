@@ -17,6 +17,7 @@ if (CURRENT_ENV === 'prod') {
   const basicAuth = require('express-basic-auth')
   app.use(basicAuth({
       users: { 'user1': 'mingtian123' },
+      challenge: true
   }));
 }
 
