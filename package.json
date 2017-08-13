@@ -1,0 +1,31 @@
+{
+  "name": "sql-over-rest",
+  "version": "0.1.0",
+  "description": "Send SQL queries over REST api to quickly prototype your ideas",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mattshen/sql-over-rest.git"
+  },
+  "keywords": [
+    "SQL",
+    "REST",
+    "MySQL",
+    "Prototype"
+  ],
+  "author": "Matt Shen <lovelywib@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mattshen/sql-over-rest/issues"
+  },
+  "homepage": "https://github.com/mattshen/sql-over-rest#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "mysql": "^2.14.1",
+    "parse-headers": "^2.0.1"
+  }
+}
