@@ -3,17 +3,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 //environment check
-const CURRENT_ENV = process.env.CURRENT_ENV || 'dev';
-console.log('Current Environment: ' + CURRENT_ENV);
+const NODE_ENV = process.env.NODE_ENV || 'dev';
+console.log('Current Environment: ' + NODE_ENV);
 
 //middlewares
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-let routerPrefix = '';
-if (CURRENT_ENV === 'prod') {
-  routerPrefix = 'soh';
+if (NODE_ENV === 'production') {
   const basicAuth = require('express-basic-auth')
   app.use(basicAuth({
       users: { 'user1': 'mingtian123' },
@@ -25,9 +23,10 @@ if (CURRENT_ENV === 'prod') {
 const index = require('./routes/index');
 const sql = require('./routes/sql');
 const insert = require('./routes/insert');
-app.use(routerPrefix + '/', index);
-app.use(routerPrefix + '/sql', sql);
-app.use(routerPrefix + '/insert', insert);
+let contextPath = process.env.APP_CONTEXT_PATH || '';
+app.use(contextPath + '/', index);
+app.use(contextPath + '/sql', sql);
+app.use(contextPath + '/insert', insert);
 
 
 // start http server
