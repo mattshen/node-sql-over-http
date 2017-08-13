@@ -1,79 +1,76 @@
-// Basic Setup
-var http     = require('http'),
-	express  = require('express'),
-	mysql    = require('mysql'),
-  bodyParser   = require('body-parser');
- 
-// Database Connection
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'letterbox'
-});
+const http = require('http');
+const express = require('express');
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
 
+//connect to mysql
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'letterbox'
+});
 try {
-	connection.connect();
-} catch(e) {
-	console.log('Database Connetion failed:' + e);
+  connection.connect();
+} catch (e) {
+  console.log('database connection failed:', e);
 }
- 
- 
-// Setup express
-var app = express();
+
+//middlewares
+const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.set('port', process.env.PORT || 5000);
- 
-// Set default route
+
+//routes
 app.get('/', function (req, res) {
-	res.send('<html><body><p>Welcome to SQL over REST</p></body></html>');
+  res.send('<html><body><p>Welcome to SQL over HTTP</p></body></html>');
 });
 
-app.get('/sql', function (req, res){
-  const sql = req.header('sql');
-  
-	connection.query(sql, function(err, rows, fields) {
-    if (!err){
-      let response = {};
-
+const createResponse = (success, results, error) => {
+  return JSON.stringify({
+    success,
+    results,
+    error,
+  });
+};
+app.get('/sql', function (req, res) {
+  const sql = req.header('query');
+  connection.query(sql, function (err, rows, fields) {
+    if (!err) {
+      let response = null;
       if (rows.length != 0) {
-        response = {'result' : 'success', 'data' : rows};
+        response = createResponse(true, rows);
       } else {
-        response = {'result' : 'error', 'msg' : 'No Results Found'};
+        response = createResponse(false, undefined, 'No Results Found'); 
       }
-
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).send(JSON.stringify(response));
+      res.status(200).send(response);
     } else {
-      res.status(400).send(err);
+      res.status(400).send(createResponse(false, undefined, err));
     }
-	});
-
+  });
 });
 
-app.post('/sql', function (req,res) {
-  const sql = req.header('sql');
-   
-		connection.query(sql, function(err, result) {
-      if (!err){
-        let response = {};
-        if (result.affectedRows != 0) {
-          response = {'result' : 'success'};
-        } else {
-          response = {'result' : 'error', 'msg' : 'No Result Found'};
-        }
-
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).send(JSON.stringify(response));
+app.post('/sql', function (req, res) {
+  const sql = req.header('query');
+  connection.query(sql, function (err, result) {
+    if (!err) {
+      let response = null;
+      if (result.affectedRows != 0) {
+        response = createResponse(true, result);;
       } else {
-        res.status(400).send(err);
+        response = createResponse(false, undefined, 'No Result Found');
       }
-    });
- 
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).send(response);
+    } else {
+      res.status(400).send(createResponse(false, undefined, err));
+    }
+  });
 });
- 
-// Create server
-http.createServer(app).listen(app.get('port'), function(){
-	console.log('Server listening on port ' + app.get('port'));
+
+// start http server
+const port = process.env.PORT || 3000;
+http.createServer(app).listen(port, function () {
+  console.log('Server listening on port ' + port);
 });
