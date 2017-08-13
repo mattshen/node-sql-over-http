@@ -6,8 +6,8 @@ const router = express.Router();
 
 
 router.post('/', function (req, res, next) {
-  const sql = req.header('query');
-  connection.query(sql, function (err, result) {
+  const query = req.header('query') || req.body.query;
+  connection.query(query, function (err, result) {
     if (!err) {
       let response = null;
 
