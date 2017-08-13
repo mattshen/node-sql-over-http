@@ -32,7 +32,7 @@ app.get('/', function (req, res) {
 
 app.get('/sql', function (req, res){
   const sql = req.header('sql');
-
+  
 	connection.query(sql, function(err, rows, fields) {
     if (!err){
       let response = {};
@@ -61,7 +61,7 @@ app.post('/sql', function (req,res) {
         if (result.affectedRows != 0) {
           response = {'result' : 'success'};
         } else {
-          response = {'msg' : 'No Result Found'};
+          response = {'result' : 'error', 'msg' : 'No Result Found'};
         }
 
         res.setHeader('Content-Type', 'application/json');
